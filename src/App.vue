@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, computed, ref} from 'vue'
+import {onMounted, computed, ref, watchEffect} from 'vue'
 import axiosInstance from './axios';
 import { TransitionFade } from '@morev/vue-transitions'
 
@@ -59,6 +59,14 @@ onMounted(async () => {
     fetchingData()
 })
 
+watchEffect(() => {
+  if (isModalOpen.value) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+  }
+});
+
 </script>
 
 <template>
@@ -105,6 +113,7 @@ onMounted(async () => {
 }
 
 .card {
+    cursor: pointer;
     transition: .3s all;
 }
 
@@ -122,6 +131,7 @@ onMounted(async () => {
         height: 100%;
         background-color: #333;
         opacity: 0.3;
+        z-index: 1000;
     }
     
     .content {
@@ -131,17 +141,24 @@ onMounted(async () => {
         left: 50%;
         transform: translate(-50%, -50%);
         border-radius: 10px;
-        overflow: hidden;
-
+        max-width: 90%;
+        max-height: 90%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 20px;
+        z-index: 1001;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        
         &__close {
             position: absolute;
             right: 3%;
-            top: 1%;
+            top: 3%;
             background-color: #003d7d;
             color: #fff;
             border-radius: 5px;
-            padding: 2px 13px;
+            padding: 5px 10px;
             transition: .3s background-color;
+            z-index: 1002;
         }
 
         &__close:active {
